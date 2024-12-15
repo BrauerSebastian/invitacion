@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación de Boda</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f1e4;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: #e6c6d5;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #a0525f;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #6d4c41;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #a0525f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background-color: #7d3a44;
+        }
+
+        .animated-heart {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+    <script>
+        async function confirmarAsistencia() {
+            const nombre = document.getElementById('nombre').value;
+            if (nombre) {
+                alert(`Gracias por confirmar, ${nombre}! ❤️`);
+                document.getElementById('corazon').src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Red_heart.png/1024px-Red_heart.png';
+                
+                // Enviar confirmación a Google Sheets con no-cors
+                const url = 'https://script.google.com/macros/s/AKfycbyUSyJHoVYmth63YFNGNLMPEnwihb5otkEWLZKGlIjeoptvXt7KYbUDRwUSygAdjXBRNA/exec'; // Reemplaza con tu URL del Web App
+                try {
+                    await fetch(url, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nombre })
+                    });
+                } catch (error) {
+                    console.error('Error al enviar la confirmación:', error);
+                    alert('Hubo un error al enviar la confirmación. Inténtalo de nuevo.');
+                }
+            } else {
+                alert('Por favor, ingresa tu nombre para confirmar.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="card">
+        <h1>¡Nos Casamos!</h1>
+        <h2>Estás cordialmente invitado a nuestra boda</h2>
+        <p>
+            Celebra con nosotros una ocasión muy especial y única en nuestra vida.
+            La ceremonia se llevará a cabo al aire libre con nuestros amigos y familiares más cercanos.
+        </p>
+        <p><strong>Fecha:</strong> 15 de Abril de 2024</p>
+        <p><strong>Hora:</strong> 17:00 hrs</p>
+        <p><strong>Lugar:</strong> Jardín del Lago, Buenos Aires</p>
+        <input type="text" id="nombre" placeholder="Tu nombre" />
+        <br>
+        <a href="#" class="button" onclick="confirmarAsistencia()">Confirma tu asistencia</a>
+        <img id="corazon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Heart_icon_red_hollow.svg/1024px-Red_heart_icon_red_hollow.svg.png" alt="Heart" class="animated-heart">
+    </div>
+</body>
+</html>
